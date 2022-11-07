@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class=".BreedItemBinding">
+
+        <variable
+            name="breed"
+            type="com.mendelin.catpediahilt.domain.model.Breed" />
+
+        <variable
+            name="listener"
+            type="com.mendelin.catpediahilt.presentation.main.BreedCallback" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> listener.setBreedId(breed.id)}">
+
+        <ImageView
+            android:id="@+id/breedImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{breed.imageUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/breedCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@{breed.country}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Breed name" />
+
+        <TextView
+            android:id="@+id/breedName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@{breed.name}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/breedCountry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Breed country" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

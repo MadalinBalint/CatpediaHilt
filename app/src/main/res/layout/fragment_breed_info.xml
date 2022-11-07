@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="info"
+            type="com.mendelin.catpediahilt.domain.model.BreedDetails" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context=".presentation.breed_info.BreedInfoFragment">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerCats"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:overScrollMode="never"
+                    tools:listitem="@layout/cat_item"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@string/name" />
+
+                <TextView
+                    android:id="@+id/txtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    tools:text="name"
+                    android:text="@{info.name}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@string/description" />
+
+                <TextView
+                    android:id="@+id/txtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    tools:text="descriere"
+                    android:text="@{info.description}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@string/temperament" />
+
+                <TextView
+                    android:id="@+id/txtTemperament"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    tools:text="temperament"
+                    android:text="@{info.temperament}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@string/life_span" />
+
+                <TextView
+                    android:id="@+id/txtLifeSpan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    tools:text="life span"
+                    android:text="@{info.life_span}" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
+
+</layout>

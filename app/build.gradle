@@ -1,0 +1,151 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "kotlin-parcelize"
+    id "androidx.navigation.safeargs.kotlin"
+    id "kotlin-kapt" // Required for annotation processing.
+    id "dagger.hilt.android.plugin"
+}
+
+ext {
+    nav_version = "2.5.3"
+    lifecycle_version = "2.5.1"
+    retrofit_version = "2.9.0"
+    room_version = "2.4.3"
+    glide_version = "4.14.2"
+    hilt_version = "2.44"
+}
+
+android {
+    compileSdk 32
+    buildToolsVersion "32.0.0"
+
+    defaultConfig {
+        applicationId "com.mendelin.catpediahilt"
+        minSdk 23
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_HEADER", "\"x-api-key\""
+        buildConfigField "String", "API_KEY", "\"64f39d73-2f0a-4515-b192-7e5aa8e33ea2\""
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            /* Keep local server for DEBUG build type */
+            buildConfigField "String", "BASE_URL", "\"https://api.thecatapi.com/\""
+        }
+
+        release {
+            debuggable false
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+
+            /* Keep production server for RELEASE build type */
+            buildConfigField "String", "BASE_URL", "\"https://api.thecatapi.com/\""
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    kapt {
+        useBuildCache true
+        correctErrorTypes true
+    }
+
+    hilt {
+        enableAggregatingTask = true
+    }
+
+    packagingOptions {
+        resources {
+            excludes += ["META-INF/proguard/androidx-annotations.pro"]
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+}
+
+dependencies {
+    /* Testing */
+    implementation fileTree(dir: "libs", include: ["*.aar", "*.jar"], exclude: [])
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
+    testImplementation "org.mockito:mockito-core:4.8.0"
+    testImplementation 'app.cash.turbine:turbine:0.7.0'
+    androidTestImplementation "androidx.test:runner:1.4.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+
+    /* Kotlin */
+    implementation "androidx.core:core-ktx:1.8.0"
+
+    /* Android libraries */
+    implementation "androidx.appcompat:appcompat:1.5.1"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "com.google.android.material:material:1.7.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    /* Navigation components */
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    /* Lifecycle, LiveData, ViewModel */
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+
+    /* Gson */
+    implementation "com.google.code.gson:gson:2.10"
+
+    /* Retrofit networking library */
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    /* Room database */
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    /* Image handling */
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.github.bumptech.glide:annotations:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    /* Hilt - dependency injection */
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+}

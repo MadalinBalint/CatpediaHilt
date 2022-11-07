@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.breeds_list.BreedsListFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerBreeds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:overScrollMode="never"
+            tools:listitem="@layout/breed_item" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+
+</FrameLayout>
