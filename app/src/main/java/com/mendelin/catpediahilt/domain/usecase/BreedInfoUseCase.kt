@@ -9,8 +9,17 @@ class BreedInfoUseCase @Inject constructor(private val repository: CatpediaRepos
     operator fun invoke(breedId: String, limit: Int = 8) = flow {
         try {
             emit(Resource.Loading())
-            val breedInfo = repository.searchByBreed(breedId, limit)
-            emit(Resource.Success(breedInfo))
+            val apiResponse = repository.searchByBreed(breedId, limit)
+            if (apiResponse.isSuccessful) {
+                val body = apiResponse.body()
+                if (body != null) {
+                    emit(Resource.Success(body))
+                } else {
+                    emit(Resource.Error(message = "Null body exception"))
+                }
+            } else {
+                emit(Resource.Error(message = apiResponse.message()))
+            }
         } catch (ex: Exception) {
             emit(Resource.Error(message = ex.localizedMessage ?: "Exception"))
         }
