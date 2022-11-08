@@ -25,6 +25,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApplicationModule {
+    private const val READ_TIMEOUT = 60L
+    private const val CONNECTION_TIMEOUT = 60L
+
     @Provides
     @Singleton
     fun provideHeaderInterceptor(): Interceptor {
@@ -41,8 +44,8 @@ object ApplicationModule {
     @Singleton
     fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
         return OkHttpClient.Builder().apply {
-            readTimeout(60, TimeUnit.SECONDS)
-            connectTimeout(60, TimeUnit.SECONDS)
+            readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             addInterceptor(interceptor)
         }.build()
     }
