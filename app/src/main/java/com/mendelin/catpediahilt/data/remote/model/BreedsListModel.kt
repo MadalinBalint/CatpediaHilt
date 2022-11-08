@@ -1,11 +1,12 @@
 package com.mendelin.catpediahilt.data.remote.model
 
 import androidx.annotation.Keep
+import com.mendelin.catpediahilt.data.local.entity.BreedEntity
 import com.mendelin.catpediahilt.domain.model.Breed
 
 @Keep
 data class BreedsListModel(
-    val weight: WeightItem?,
+    val weight: WeightModel?,
     val id: String,
     val name: String,
     val cfa_url: String,
@@ -47,4 +48,7 @@ data class BreedsListModel(
 
 fun BreedsListModel.toBreed(): Breed =
     Breed(id, name, origin, image?.url ?: "")
+
+fun BreedsListModel.toEntity(): BreedEntity =
+    BreedEntity(id, name, origin, image?.url ?: "")
 

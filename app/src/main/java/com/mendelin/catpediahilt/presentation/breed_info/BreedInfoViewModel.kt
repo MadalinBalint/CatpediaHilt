@@ -3,9 +3,7 @@ package com.mendelin.catpediahilt.presentation.breed_info
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mendelin.catpediahilt.data.local.entity.BreedDetailsEntity
 import com.mendelin.catpediahilt.data.local.entity.toDetails
-import com.mendelin.catpediahilt.data.remote.model.BreedSearchModel
 import com.mendelin.catpediahilt.data.remote.model.toDetails
 import com.mendelin.catpediahilt.domain.Resource
 import com.mendelin.catpediahilt.domain.model.BreedDetails
@@ -74,11 +72,8 @@ class BreedInfoViewModel @Inject constructor(
         }
     }
 
-    fun createOfflineBreedsInfo(breedDetails: BreedDetails, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        viewModelScope.launch {
-            createBreedDetailsUseCase(breedDetails).flowOn(dispatcher)
-        }
-    }
+    fun createOfflineBreedsInfo(breedDetails: BreedDetails, dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+        createBreedDetailsUseCase(breedDetails).flowOn(dispatcher)
 
     /* Online mode */
     fun fetchBreedInfo(breedId: String, dispatcher: CoroutineDispatcher = Dispatchers.IO) {

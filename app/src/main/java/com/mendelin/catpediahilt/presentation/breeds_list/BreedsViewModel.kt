@@ -76,11 +76,8 @@ class BreedsViewModel @Inject constructor(
         }
     }
 
-    fun createOfflineBreedsList(breed: Breed, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        viewModelScope.launch {
-            createBreedUseCase(breed).flowOn(dispatcher)
-        }
-    }
+    fun createOfflineBreedsList(breed: Breed, dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+        createBreedUseCase(breed).flowOn(dispatcher)
 
     /* Online mode */
     fun fetchBreedsList(dispatcher: CoroutineDispatcher = Dispatchers.IO) {

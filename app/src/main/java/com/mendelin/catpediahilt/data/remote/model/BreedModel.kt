@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 
 @Keep
 data class BreedModel(
-    val weight: WeightItem,
+    val weight: WeightModel,
     val id: String,
     val name: String,
     val cfa_url: String,
