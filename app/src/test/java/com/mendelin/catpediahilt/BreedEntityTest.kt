@@ -1,7 +1,7 @@
 package com.mendelin.catpediahilt
 
-import com.mendelin.catpediahilt.data.local.dao.BreedEntity
-import com.mendelin.catpediahilt.data.local.dao.toBreed
+import com.mendelin.catpediahilt.data.local.entity.BreedEntity
+import com.mendelin.catpediahilt.data.local.entity.toBreed
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

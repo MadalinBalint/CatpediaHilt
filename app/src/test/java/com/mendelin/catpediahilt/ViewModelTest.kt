@@ -1,12 +1,17 @@
 package com.mendelin.catpediahilt
 
+import app.cash.turbine.test
+import com.mendelin.catpediahilt.data.local.OfflineRepository
+import com.mendelin.catpediahilt.data.local.dao.CatsDao
 import com.mendelin.catpediahilt.data.remote.CatpediaApi
 import com.mendelin.catpediahilt.data.remote.CatpediaRepository
-import com.mendelin.catpediahilt.data.remote.model.BreedsListModel
-import com.mendelin.catpediahilt.data.remote.model.ImageModel
-import com.mendelin.catpediahilt.data.remote.model.WeightItem
-import com.mendelin.catpediahilt.domain.usecase.*
-import com.mendelin.catpediahilt.presentation.main.MainViewModel
+import com.mendelin.catpediahilt.data.remote.model.*
+import com.mendelin.catpediahilt.domain.Resource
+import com.mendelin.catpediahilt.domain.usecase.BreedsListUseCase
+import com.mendelin.catpediahilt.domain.usecase.CreateBreedUseCase
+import com.mendelin.catpediahilt.domain.usecase.GetBreedsUseCase
+import com.mendelin.catpediahilt.presentation.breeds_list.BreedsUiState
+import com.mendelin.catpediahilt.presentation.breeds_list.BreedsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -15,24 +20,22 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 class ViewModelTest {
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: BreedsViewModel
 
     @Before
     fun setUp() = runBlocking {
         Dispatchers.setMain(StandardTestDispatcher())
-        viewModel = MainViewModel(
+        viewModel = BreedsViewModel(
             getBreedsListUseCase(),
-            getBreedInfoUseCase(),
             getCreateBreedUseCase(),
             getGetBreedsUseCase(),
-            getCreateBreedDetailsUseCase(),
-            getGetBreedDetailsUseCase(),
         )
     }
 
@@ -43,15 +46,30 @@ class ViewModelTest {
 
     @Test
     fun testInitialState() = runBlocking {
-        assertEquals(viewModel.isFailed.value, Pair(false, ""))
-        assertEquals(viewModel.isLoading.value, false)
-        assertEquals(viewModel.breedsList.value, listOf(getBreedsListModel()))
+        assertEquals(viewModel.viewState.value,
+            BreedsUiState(
+                isLoading = false,
+                breeds = emptyList(),
+                isFailed = Pair(false, ""),
+                isOffline = false
+            )
+        )
     }
 
     @Test
-    fun testGetBreedsList() = runBlocking {
-        viewModel.fetchBreedsList().test {
+    fun testOfflineGetBreedsList() = runBlocking {
+        viewModel.createOfflineBreedsList(newBreedsListModel().toBreed()).test {
+            val loading = awaitItem()
+            assert(loading is Resource.Loading)
+            assertNull(loading.data)
+            assertNull(loading.message)
 
+            val success = awaitItem()
+            assert(success is Resource.Success)
+            assertNull(success.data)
+            assertNull(success.message)
+
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -59,36 +77,35 @@ class ViewModelTest {
         val mockApi = Mockito.mock(CatpediaApi::class.java)
 
         Mockito.`when`(mockApi.getBreedsList())
-            .thenReturn(listOf(getBreedsListModel()))
+            .thenReturn(listOf(newBreedsListModel()))
 
         val repo = CatpediaRepository(mockApi)
         return BreedsListUseCase(repo)
     }
 
-    private suspend fun getBreedInfoUseCase(): BreedInfoUseCase {
-
-    }
-
     private suspend fun getCreateBreedUseCase(): CreateBreedUseCase {
+        val mockApi = Mockito.mock(CatsDao::class.java)
 
+        Mockito.`when`(mockApi.insertBreed(newBreedEntity()))
+            .thenReturn(Unit)
+
+        val repo = OfflineRepository(mockApi)
+        return CreateBreedUseCase(repo)
     }
 
     private suspend fun getGetBreedsUseCase(): GetBreedsUseCase {
+        val mockApi = Mockito.mock(CatsDao::class.java)
 
+        Mockito.`when`(mockApi.getBreedsList())
+            .thenReturn(listOf(newBreedEntity()))
+
+        val repo = OfflineRepository(mockApi)
+        return GetBreedsUseCase(repo)
     }
 
-    private suspend fun getCreateBreedDetailsUseCase(): CreateBreedDetailsUseCase {
-
-    }
-
-    private suspend fun getGetBreedDetailsUseCase(): GetBreedDetailsUseCase {
-
-    }
-
-
-    private fun getBreedsListModel() =
+    private fun newBreedsListModel() =
         BreedsListModel(
-            weight = WeightItem("2-3", "3-4"),
+            weight = WeightModel("2-3", "3-4"),
             id = "abys",
             name = "Abyssinian",
             cfa_url = "",
@@ -127,4 +144,6 @@ class ViewModelTest {
             reference_image_id = "",
             image = ImageModel("", 100, 100, "https:/cdm.a.com")
         )
+
+    private fun newBreedEntity() = newBreedsListModel().toEntity()
 }
