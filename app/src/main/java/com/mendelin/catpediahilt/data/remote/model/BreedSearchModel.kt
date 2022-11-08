@@ -12,7 +12,7 @@ data class BreedSearchModel(
     val height: Int,
 )
 
-fun List<BreedSearchModel>.toBreedDetails(): BreedDetails {
+fun List<BreedSearchModel>.toDetails(): BreedDetails {
     val first = firstOrNull()
     if (first != null && first.breeds.isNotEmpty()) {
         val images = map { it.url }

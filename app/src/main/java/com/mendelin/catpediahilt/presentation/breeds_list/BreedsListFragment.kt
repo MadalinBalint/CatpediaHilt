@@ -6,28 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mendelin.catpediahilt.data.local.entity.BreedEntity
-import com.mendelin.catpediahilt.data.local.entity.toBreed
-import com.mendelin.catpediahilt.data.remote.model.BreedsListModel
-import com.mendelin.catpediahilt.data.remote.model.toBreed
 import com.mendelin.catpediahilt.databinding.FragmentBreedsListBinding
 import com.mendelin.catpediahilt.presentation.main.BreedCallback
-import com.mendelin.catpediahilt.presentation.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BreedsListFragment : Fragment() {
 
     private var binding: FragmentBreedsListBinding? = null
-    private val mainViewModel: MainViewModel by activityViewModels()
+    private val viewModel: BreedsViewModel by viewModels()
     private lateinit var breedsAdapter: BreedsListAdapter
 
     override fun onCreateView(
@@ -59,58 +53,40 @@ class BreedsListFragment : Fragment() {
             itemAnimator = null
             isNestedScrollingEnabled = true
             setHasFixedSize(true)
-
         }
 
         binding?.swipeList?.setOnRefreshListener {
-            mainViewModel.fetchBreedsList()
+            viewModel.fetchBreedsList()
             binding?.swipeList?.isRefreshing = false
         }
 
-        mainViewModel.fetchOfflineBreedsList()
+        viewModel.fetchOfflineBreedsList()
 
-        if (mainViewModel.breedsList.value.isEmpty()) {
-            mainViewModel.fetchBreedsList()
+        if (viewModel.viewState.value.breeds.isEmpty()) {
+            viewModel.fetchBreedsList()
         }
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.offlineBreedsList.collectLatest {
-                    if (it.isNotEmpty()) {
-                        breedsAdapter.setList(it.map(BreedEntity::toBreed))
-                    }
-                }
-            }
-        }
+                viewModel.viewState.collect { state ->
+                    binding?.progressBar?.visibility = if (state.isLoading) View.VISIBLE else View.INVISIBLE
+                    val (hasFailed, message) = state.isFailed
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.breedsList.collectLatest {
-                    val breeds = it.map(BreedsListModel::toBreed)
-                    breedsAdapter.setList(breeds)
-
-                    breeds.forEach(mainViewModel::createOfflineBreedsList)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.isLoading.collectLatest {
-                    binding?.progressBar?.visibility = if (it) View.VISIBLE else View.INVISIBLE
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.isFailed.collectLatest { (hasFailed, message) ->
                     if (hasFailed) {
                         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG)
                             .show()
-                        mainViewModel.fetchOfflineBreedsList()
+                        viewModel.fetchOfflineBreedsList()
+                    } else {
+                        val breeds = state.breeds
+                        if (breeds.isNotEmpty()) {
+                            breedsAdapter.setList(breeds)
+
+                            if (!state.isOffline) {
+                                breeds.forEach(viewModel::createOfflineBreedsList)
+                            }
+                        }
                     }
                 }
             }

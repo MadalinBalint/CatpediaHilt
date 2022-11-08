@@ -21,5 +21,5 @@ data class BreedDetailsEntity(
     val imageUrls: List<String> = emptyList()
 )
 
-fun BreedDetailsEntity.toBreedDetails(): BreedDetails =
+fun BreedDetailsEntity.toDetails(): BreedDetails =
     BreedDetails(id, name, country, temperament, description, life_span, imageUrls)
