@@ -11,7 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mendelin.catpediahilt.databinding.FragmentBreedsListBinding
 import com.mendelin.catpediahilt.presentation.main.BreedCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,10 +50,9 @@ class BreedsListFragment : Fragment() {
 
         binding?.recyclerBreeds?.apply {
             adapter = breedsAdapter
-            layoutManager = LinearLayoutManager(requireActivity())
-            itemAnimator = null
+            layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+            //itemAnimator = null
             isNestedScrollingEnabled = true
-            setHasFixedSize(true)
         }
 
         binding?.swipeList?.setOnRefreshListener {
@@ -71,7 +71,8 @@ class BreedsListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { state ->
-                    binding?.progressBar?.visibility = if (state.isLoading) View.VISIBLE else View.INVISIBLE
+                    binding?.progressBar?.visibility =
+                        if (state.isLoading) View.VISIBLE else View.INVISIBLE
                     val (hasFailed, message) = state.isFailed
 
                     if (hasFailed) {

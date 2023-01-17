@@ -2,7 +2,7 @@ package com.mendelin.catpediahilt.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import com.mendelin.catpediahilt.data.local.entity.BreedDetailsEntity
 import com.mendelin.catpediahilt.data.local.entity.BreedEntity

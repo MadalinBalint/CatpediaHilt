@@ -14,7 +14,7 @@ fun ImageView.setImageUrl(imageUrl: String?) {
     imageUrl?.let {
         val circularProgressDrawable = CircularProgressDrawable(context).apply {
             strokeWidth = 6f
-            centerRadius = 50f
+            centerRadius = 56f
             start()
         }
 

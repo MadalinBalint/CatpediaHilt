@@ -24,6 +24,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import retrofit2.Response
 
 @ExperimentalCoroutinesApi
 class ViewModelTest {
@@ -77,7 +78,7 @@ class ViewModelTest {
         val mockApi = Mockito.mock(CatpediaApi::class.java)
 
         Mockito.`when`(mockApi.getBreedsList())
-            .thenReturn(listOf(newBreedsListModel()))
+            .thenReturn(Response.success(listOf(newBreedsListModel())))
 
         val repo = CatpediaRepository(mockApi)
         return BreedsListUseCase(repo)
