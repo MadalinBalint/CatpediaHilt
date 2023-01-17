@@ -11,14 +11,14 @@ ext {
     nav_version = "2.5.3"
     lifecycle_version = "2.5.1"
     retrofit_version = "2.9.0"
-    room_version = "2.4.3"
+    room_version = '2.5.0'
     glide_version = "4.14.2"
-    hilt_version = "2.44"
+    hilt_version = '2.44.2'
 }
 
 android {
     compileSdk 33
-    buildToolsVersion "32.0.0"
+    buildToolsVersion '33.0.1'
 
     defaultConfig {
         applicationId "com.mendelin.catpediahilt"
@@ -101,9 +101,9 @@ dependencies {
     /* Testing */
     implementation fileTree(dir: "libs", include: ["*.aar", "*.jar"], exclude: [])
     testImplementation "junit:junit:4.13.2"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
-    testImplementation "org.mockito:mockito-core:4.8.0"
-    testImplementation 'app.cash.turbine:turbine:0.7.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation 'org.mockito:mockito-core:5.0.0'
+    testImplementation 'app.cash.turbine:turbine:0.12.1'
     androidTestImplementation "androidx.test:runner:1.5.2"
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
@@ -112,7 +112,7 @@ dependencies {
     implementation "androidx.core:core-ktx:1.9.0"
 
     /* Android libraries */
-    implementation "androidx.appcompat:appcompat:1.5.1"
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "com.google.android.material:material:1.7.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
@@ -129,7 +129,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
     /* Gson */
-    implementation "com.google.code.gson:gson:2.10"
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     /* Retrofit networking library */
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
