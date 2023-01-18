@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/BreedsListFragment"
         android:name="com.mendelin.catpediahilt.presentation.breeds_list.BreedsListFragment"
-        android:label="BreedsListFragment"
+        android:label="Cat breeds"
         tools:layout="@layout/fragment_breeds_list">
 
         <action
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/BreedInfoFragment"
         android:name="com.mendelin.catpediahilt.presentation.breed_info.BreedInfoFragment"
-        android:label="BreedInfoFragment"
+        android:label="Breed information"
         tools:layout="@layout/fragment_breed_info">
         <argument
             android:name="breedId"

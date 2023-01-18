@@ -18,7 +18,7 @@ data class BreedDetailsEntity(
     val description: String = "",
     val life_span: String = "",
     @TypeConverters(ConversterStringList::class)
-    val imageUrls: List<String> = emptyList()
+    val imageUrls: List<String> = emptyList(),
 )
 
 fun BreedDetailsEntity.toDetails(): BreedDetails =

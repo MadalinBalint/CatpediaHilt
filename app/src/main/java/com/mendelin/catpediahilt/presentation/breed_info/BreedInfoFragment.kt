@@ -65,6 +65,7 @@ class BreedInfoFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { state ->
+                    binding?.catInfo?.visibility = if (state.isLoading) View.INVISIBLE else View.VISIBLE
                     binding?.progressBar?.visibility = if (state.isLoading) View.VISIBLE else View.INVISIBLE
                     val (hasFailed, message) = state.isFailed
 

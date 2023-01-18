@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="320dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         app:imageUrl="@{url}"
         tools:srcCompat="@tools:sample/avatars" />
 
