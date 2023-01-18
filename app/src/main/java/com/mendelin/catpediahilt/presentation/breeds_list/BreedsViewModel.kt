@@ -48,6 +48,7 @@ class BreedsViewModel @Inject constructor(
                             }
                         }
                         is Resource.Success -> {
+                            Log.d("TAG", "size = ${it.data?.size}")
                             _viewState.update { state ->
                                 state.copy(
                                     isLoading = false,
@@ -76,8 +77,24 @@ class BreedsViewModel @Inject constructor(
         }
     }
 
-    fun createOfflineBreedsList(breed: Breed, dispatcher: CoroutineDispatcher = Dispatchers.IO) =
-        createBreedUseCase(breed).flowOn(dispatcher)
+   fun createOfflineBreedsList(breed: Breed, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+       viewModelScope.launch {
+           createBreedUseCase(breed).flowOn(dispatcher)
+               .collect {
+                   when (it) {
+                       is Resource.Loading -> {
+                           Log.d("TAG", "insert ${breed.id} in progress")
+                       }
+                       is Resource.Success -> {
+                           Log.d("TAG", "insert ${breed.id} success")
+                       }
+                       is Resource.Error -> {
+                           Log.d("TAG", it.message ?: "insert ${breed.id} error")
+                       }
+                   }
+               }
+       }
+   }
 
     /* Online mode */
     fun fetchBreedsList(dispatcher: CoroutineDispatcher = Dispatchers.IO) {

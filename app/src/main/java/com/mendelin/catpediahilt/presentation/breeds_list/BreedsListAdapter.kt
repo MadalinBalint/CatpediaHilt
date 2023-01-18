@@ -40,7 +40,6 @@ class BreedsListAdapter(val callback: BreedCallback) :
     }
 
     override fun onBindViewHolder(holder: BreedsListViewHolder, position: Int) {
-        Log.d("onBindViewHolder", "position = $position")
         val breed = breedsList[position]
         holder.bind(breed)
     }

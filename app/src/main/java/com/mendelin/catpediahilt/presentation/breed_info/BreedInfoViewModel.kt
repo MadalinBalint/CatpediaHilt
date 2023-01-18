@@ -56,8 +56,6 @@ class BreedInfoViewModel @Inject constructor(
                             }
                         }
                         is Resource.Error -> {
-                            Log.d("TAG", it.message ?: "error")
-
                             _viewState.update { state ->
                                 state.copy(
                                     isLoading = false,
@@ -72,8 +70,24 @@ class BreedInfoViewModel @Inject constructor(
         }
     }
 
-    fun createOfflineBreedsInfo(breedDetails: BreedDetails, dispatcher: CoroutineDispatcher = Dispatchers.IO) =
-        createBreedDetailsUseCase(breedDetails).flowOn(dispatcher)
+    fun createOfflineBreedsInfo(breedDetails: BreedDetails, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        viewModelScope.launch {
+            createBreedDetailsUseCase(breedDetails).flowOn(dispatcher)
+                .collect {
+                    when (it) {
+                        is Resource.Loading -> {
+                            Log.d("TAG", "insert ${breedDetails.id} in progress")
+                        }
+                        is Resource.Success -> {
+                            Log.d("TAG", "insert ${breedDetails.id} success")
+                        }
+                        is Resource.Error -> {
+                            Log.d("TAG", it.message ?: "insert ${breedDetails.id} error")
+                        }
+                    }
+                }
+        }
+    }
 
     /* Online mode */
     fun fetchBreedInfo(breedId: String, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
@@ -102,8 +116,6 @@ class BreedInfoViewModel @Inject constructor(
                             }
                         }
                         is Resource.Error -> {
-                            Log.d("TAG", it.message ?: "error")
-
                             _viewState.update { state ->
                                 state.copy(
                                     isLoading = false,

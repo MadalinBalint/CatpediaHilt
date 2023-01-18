@@ -1,5 +1,6 @@
 package com.mendelin.catpediahilt.data.local
 
+import android.util.Log
 import com.mendelin.catpediahilt.data.local.dao.CatsDao
 import com.mendelin.catpediahilt.data.local.entity.BreedDetailsEntity
 import com.mendelin.catpediahilt.data.local.entity.BreedEntity

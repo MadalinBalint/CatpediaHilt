@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class CreateBreedUseCase @Inject constructor(private val repository: OfflineRepository) {
-    operator fun invoke(breed: Breed) = flow {
+   suspend operator fun invoke(breed: Breed) = flow {
         try {
             emit(Resource.Loading())
             repository.insertBreed(breed)

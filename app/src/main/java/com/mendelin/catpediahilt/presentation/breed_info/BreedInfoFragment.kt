@@ -78,7 +78,6 @@ class BreedInfoFragment : Fragment() {
                         if (info != null) {
                             binding?.info = info
 
-                            Log.d("TAG", info.toString())
                             catsAdapter.setList(info.imageUrls)
 
                             if (!state.isOffline) {

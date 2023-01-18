@@ -51,11 +51,12 @@ class BreedsListFragment : Fragment() {
         binding?.recyclerBreeds?.apply {
             adapter = breedsAdapter
             layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-            //itemAnimator = null
+            itemAnimator = null
             isNestedScrollingEnabled = true
         }
 
         binding?.swipeList?.setOnRefreshListener {
+            viewModel.fetchOfflineBreedsList()
             viewModel.fetchBreedsList()
             binding?.swipeList?.isRefreshing = false
         }

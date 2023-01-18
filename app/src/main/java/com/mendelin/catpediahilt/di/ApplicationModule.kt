@@ -1,19 +1,16 @@
 package com.mendelin.catpediahilt.di
 
-import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mendelin.catpediahilt.BuildConfig
 import com.mendelin.catpediahilt.data.local.OfflineRepository
 import com.mendelin.catpediahilt.data.local.dao.CatsDao
-import com.mendelin.catpediahilt.data.local.dao.CatsDatabase
 import com.mendelin.catpediahilt.data.remote.CatpediaApi
 import com.mendelin.catpediahilt.data.remote.CatpediaRepository
 import com.mendelin.catpediahilt.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -32,9 +29,8 @@ object ApplicationModule {
     @Singleton
     fun provideHeaderInterceptor(): Interceptor {
         return Interceptor { chain ->
-            val builder = chain.request()
-                .newBuilder()
-                .addHeader(BuildConfig.API_HEADER, BuildConfig.API_KEY)
+            val builder =
+                chain.request().newBuilder().addHeader(BuildConfig.API_HEADER, BuildConfig.API_KEY)
 
             chain.proceed(builder.build())
         }
@@ -53,19 +49,14 @@ object ApplicationModule {
     @Provides
     @Singleton
     fun provideGsonClient(): Gson {
-        return GsonBuilder()
-            .setLenient()
-            .create()
+        return GsonBuilder().setLenient().create()
     }
 
     @Singleton
     @Provides
     fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(client)
-            .build()
+        return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson)).client(client).build()
     }
 
     @Provides
@@ -78,13 +69,6 @@ object ApplicationModule {
     @Singleton
     fun provideCatpediaRepository(api: CatpediaApi): CatpediaRepository {
         return CatpediaRepository(api)
-    }
-
-    @Provides
-    @Singleton
-    fun provideCatsDao(@ApplicationContext context: Context): CatsDao {
-        return CatsDatabase.getDatabase(context)
-            .catsDao()
     }
 
     @Provides
