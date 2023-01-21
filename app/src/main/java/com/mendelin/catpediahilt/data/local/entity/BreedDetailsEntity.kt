@@ -19,7 +19,8 @@ data class BreedDetailsEntity(
     val life_span: String = "",
     @TypeConverters(ConversterStringList::class)
     val imageUrls: List<String> = emptyList(),
+    val wikipedia_url: String = "",
 )
 
 fun BreedDetailsEntity.toDetails(): BreedDetails =
-    BreedDetails(id, name, country, temperament, description, life_span, imageUrls)
+    BreedDetails(id, name, country, temperament, description, life_span, imageUrls, wikipedia_url)

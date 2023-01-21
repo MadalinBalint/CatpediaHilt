@@ -23,6 +23,7 @@ class DatabaseModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): CatsDatabase {
         return Room.databaseBuilder(context, CatsDatabase::class.java, "CatsDB")
+            .addMigrations(*CatsDatabase.dbMigrations)
             .build()
     }
 }

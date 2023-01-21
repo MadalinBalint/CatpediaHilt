@@ -116,6 +116,8 @@ class BreedInfoViewModel @Inject constructor(
                             }
                         }
                         is Resource.Error -> {
+                            Log.d("TAG", it.message ?: "error")
+
                             _viewState.update { state ->
                                 state.copy(
                                     isLoading = false,
