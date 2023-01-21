@@ -10,7 +10,7 @@ data class BreedDetails(
     val country: String = "",
     val temperament: String = "",
     val description: String = "",
-    val life_span: String = "",
+    val lifeSpan: String = "",
     val imageUrls: List<String> = emptyList(),
-    val wikipedia_url: String = "",
+    val wikipediaUrl: String = "",
 )
