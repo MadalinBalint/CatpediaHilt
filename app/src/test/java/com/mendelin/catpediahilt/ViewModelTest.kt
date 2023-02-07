@@ -61,7 +61,7 @@ class ViewModelTest {
     fun testOfflineGetBreedsList() = runBlocking {
         viewModel.createOfflineBreedsList(newBreedsListModel().toBreed()).test {
             val loading = awaitItem()
-            assert(loading is Resource.Loading)
+            assert(loading, Resource.Loading)
             assertNull(loading.data)
             assertNull(loading.message)
 
@@ -87,7 +87,7 @@ class ViewModelTest {
     private suspend fun getCreateBreedUseCase(): CreateBreedUseCase {
         val mockApi = Mockito.mock(CatsDao::class.java)
 
-        Mockito.`when`(mockApi.insertBreed(newBreedEntity()))
+        Mockito.`when`(mockApi.insertBreed(newBreed()))
             .thenReturn(Unit)
 
         val repo = OfflineRepository(mockApi)
@@ -147,4 +147,5 @@ class ViewModelTest {
         )
 
     private fun newBreedEntity() = newBreedsListModel().toEntity()
+    private fun newBreed() = newBreedsListModel().toBreed()
 }
