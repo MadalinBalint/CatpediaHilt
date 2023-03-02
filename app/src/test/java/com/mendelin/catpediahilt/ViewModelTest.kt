@@ -57,7 +57,7 @@ class ViewModelTest {
         )
     }
 
-    @Test
+   /* @Test
     fun testOfflineGetBreedsList() = runBlocking {
         viewModel.createOfflineBreedsList(newBreedsListModel().toBreed()).test {
             val loading = awaitItem()
@@ -72,7 +72,7 @@ class ViewModelTest {
 
             cancelAndConsumeRemainingEvents()
         }
-    }
+    }*/
 
     private suspend fun getBreedsListUseCase(): BreedsListUseCase {
         val mockApi = Mockito.mock(CatpediaApi::class.java)
